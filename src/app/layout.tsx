@@ -20,15 +20,15 @@ export default function RootLayout({
     <html lang="ru">
       <body className={inter.className}>
         <div className="h-20 flex flex-row place-items-center sticky top-0">
-          <Link href="/" className="flex h-12 flex-initial w-32 rounded-lg ml-4 mr-2 shadow-custom hover:shadow-cyan-500 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 items-center place-content-center">
+          <Link href="/" className="flex h-12 flex-initial w-32 rounded-lg ml-4 mr-2 shadow-custom hover:shadow-cyan-500 bg-gradient-to-r from-blue-500 to-my-gray hover:from-cyan-500 hover:to-my-gray items-center place-content-center">
             <p>Driver</p>
           </Link>
-          <Link href="/test" className="flex h-12 flex-initial w-32 rounded-lg mx-2 shadow-custom hover:shadow-cyan-500 items-center place-content-center">
+          <Link href="/schedule" className="flex h-12 flex-initial w-32 rounded-lg mx-2 shadow-custom hover:shadow-cyan-500 items-center place-content-center">
+            <p className="text-center">Расписание</p>
+          </Link>
+          <Link href="/enter" className="flex h-12 flex-initial w-32 rounded-lg mx-2 shadow-custom hover:shadow-cyan-500 items-center place-content-center mr-2 ml-auto">
             <p className="text-center">Записаться</p>
           </Link>
-          <button className="h-12 flex-initial w-32 rounded-lg mx-2 shadow-custom hover:shadow-cyan-500">
-            Расписание
-          </button>
         </div>
         {children}</body>
     </html>
