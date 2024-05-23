@@ -28,3 +28,19 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Добавьте этот стиль в ваш global.css или другой файл стилей */
+@keyframes move {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.bg-image {
+  z-index: -1;
+  animation: move linear infinite;
+}

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import MovingBackground from "./MoovingBackground";
 
 export default function Home() {
   return (
@@ -8,7 +9,11 @@ export default function Home() {
           <p className="text-6xl text-center">Driver</p>
           <p className="text-xl text-center">Планируйте. Обучайте.</p>
         </div>
+        <div className="-z-10">
+          <MovingBackground />
+        </div>
       </div>
     </main>
+
   );
 }
