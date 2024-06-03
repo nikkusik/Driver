@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import AddButton from "./components/AddButton";
 
 
 
@@ -17,7 +18,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <div className="h-20 flex flex-row place-items-center sticky top-0 place-content-center">
+        <div className="h-20 flex flex-row place-items-center sticky top-0 place-content-center bg-neutral-950 z-10">
           <Link href="/schedule" className="flex h-12 flex-initial w-32 rounded-lg mx-2 shadow-custom hover:shadow-cyan-500 items-center place-content-center bg-gradient-to-r from-blue-500 hover:from-cyan-500 hover:to-my-gray">
             <p className="text-center">Расписание</p>
           </Link>
@@ -28,7 +29,10 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
             <p className="text-center">Записаться</p>
           </Link>
         </div>
-        {children}</body>
+        <div className="-z-10">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

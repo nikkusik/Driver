@@ -34,8 +34,8 @@
     ".next/types/**/*.ts",
     "src/app/MoovingBackground.js",
     "src/app/enter/page.tsx",
-    "src/app/api/reg.js"
-, "src/app/card/InfoCard.js"  ],
+    "src/app/context/reg.js"
+, "src/app/card/InfoCard.tsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -6,7 +6,7 @@ const InfoCard = ({ student, driver, car, startDate }) => {
     return (
         <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden md:max-w-2xl m-4">
             <div className="md:flex">
-                <div className="p-8">
+                <div className="p-4">
                     <h2 className="text-xl font-semibold text-gray-900">Ученик: {student.name}</h2>
                     <p className="mt-2 text-gray-600">Учитель: {driver.name}</p>
                     <p className="mt-2 text-gray-600">Машина: {car.model} ({car.licensePlate})</p>

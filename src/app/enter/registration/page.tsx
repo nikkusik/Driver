@@ -7,8 +7,10 @@ export default function Page() {
             <div className="w-full max-w-md p-8 space-y-6 rounded shadow-md m-auto">
                 <h2 className="text-2xl font-bold text-center">Регистрация</h2>
                 <form className="space-y-4">
-                    <input type="email" placeholder="Почта" className="w-full px-3 py-2 border rounded" />
-                    <input type="password" placeholder="Пароль" className="w-full px-3 py-2 border rounded" />
+                    <input type="text" placeholder="ФИО" className="w-full px-3 py-2 border rounded text-black" />
+                    <input type="number" placeholder="Номер телефона" className="w-full px-3 py-2 border rounded text-black" />
+                    <input type="email" placeholder="Почта" className="w-full px-3 py-2 border rounded text-black" />
+                    <input type="password" placeholder="Пароль" className="w-full px-3 py-2 border rounded  text-black" />
                     <button className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
                         Зарегестрироваться
                     </button>
