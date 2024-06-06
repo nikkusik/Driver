@@ -35,7 +35,7 @@
     "src/app/MoovingBackground.js",
     "src/app/enter/page.tsx",
     "src/app/context/reg.js"
-, "src/app/card/InfoCard.js"  ],
+, "src/app/card/InfoCard.js", "src/app/schedule/add/page.tsx", "src/app/utils/submit.tsx"  ],
   "exclude": [
     "node_modules"
   ]
