@@ -1,7 +1,6 @@
 import AddButton from "../components/AddButton";
 import * as fromDb from "../api/getSchedules"
 import InfoCard from "./infoCard";
-import { useRouter } from "next/router";
 
 export default async function Page() {
     const Data = (await fromDb.default).rows

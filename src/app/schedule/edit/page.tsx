@@ -2,10 +2,11 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { update } from '@/app/api/schedule';
-// import { add } from '@/app/api/schedule';
 
 export default function Page() {
+
     const searchParams = useSearchParams();
+
     const id = searchParams.get('id');
     const initStudent = searchParams.get('student') || '';
     const initDriver = searchParams.get('driver') || '';
