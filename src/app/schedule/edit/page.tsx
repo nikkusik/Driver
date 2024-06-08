@@ -1,10 +1,8 @@
-// pages/schedule/edit/page.tsx
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, FormEvent, useEffect, useState, Suspense } from 'react';
 import { update } from '@/app/api/schedule';
-import Loading from '@/components/Loading';
 
 function ScheduleForm({ id, initStudent, initDriver, initCar, initStartdatetime }: any) {
 
