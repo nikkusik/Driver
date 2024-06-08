@@ -1,4 +1,3 @@
-import Image from "next/image";
 import MovingBackground from "./MoovingBackground";
 
 export default function Home() {

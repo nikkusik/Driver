@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "ES2019",
     "lib": [
       "dom",
       "dom.iterable",
@@ -34,8 +35,8 @@
     ".next/types/**/*.ts",
     "src/app/MoovingBackground.js",
     "src/app/enter/page.tsx",
-    "src/app/context/reg.js"
-, "src/app/card/InfoCard.js", "src/app/schedule/add/page.tsx", "src/app/utils/submit.tsx"  ],
+    "src/app/schedule/add/page.tsx"
+  ],
   "exclude": [
     "node_modules"
   ]

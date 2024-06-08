@@ -9,7 +9,7 @@ export default function Page() {
                 <form className="space-y-4">
                     <input type="email" placeholder="Почта" className="w-full px-3 py-2 border rounded text-black" />
                     <input type="password" placeholder="Пароль" className="w-full px-3 py-2 border rounded text-black" />
-                    <button className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+                    <button type="submit" className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
                         Войти
                     </button>
                     <Link href="/enter/registration" className="w-full px-4 py-2 text-white">
