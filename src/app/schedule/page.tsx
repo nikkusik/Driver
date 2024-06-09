@@ -1,9 +1,9 @@
 import AddButton from "../components/AddButton";
-import * as fromDb from "../api/getSchedules"
+import { get } from "../api/api"
 import InfoCard from "./infoCard";
 
 export default async function Page() {
-    const Data = (await fromDb.default).rows
+    const Data = (await get()).rows
     return (
         <div className="flex items-center justify-center">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-4">

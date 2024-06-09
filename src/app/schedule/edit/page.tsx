@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, FormEvent, useEffect, useState, Suspense } from 'react';
-import { update } from '@/app/api/schedule';
+import { edit } from '@/app/api/api';
 import Loading from '@/app/components/Loading';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 function Search() {
     const searchParams = useSearchParams();
@@ -25,7 +25,6 @@ export default function Page() {
     )
 }
 function Main({ id, initStudent, initDriver, initCar, initStartdatetime }: any) {
-
     const initDate = initStartdatetime?.split('T')[0] || '';
     const initTime = initStartdatetime?.split('T')[1] || '';
 
@@ -49,12 +48,10 @@ function Main({ id, initStudent, initDriver, initCar, initStartdatetime }: any) 
         if (name === 'startdatetime') setStartdatetime(value);
     }
 
-    const router = useRouter();
-
     async function onSubmitHandler(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
-        await update(student, driver, car, startdatetime, id);
-        router.push("/schedule");
+        await edit(student, driver, car, startdatetime, id);
+        window.location.href = "/schedule"
     }
 
     return (
