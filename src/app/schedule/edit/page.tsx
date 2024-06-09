@@ -3,9 +3,28 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, FormEvent, useEffect, useState, Suspense } from 'react';
 import { update } from '@/app/api/schedule';
-import Loading from '@/app/Loading';
+import Loading from '@/app/components/Loading';
 
-function ScheduleForm({ id, initStudent, initDriver, initCar, initStartdatetime }: any) {
+function Search() {
+    const searchParams = useSearchParams();
+
+    const id = searchParams.get('id') || '';
+    const initStudent = searchParams.get('student') || '';
+    const initDriver = searchParams.get('driver') || '';
+    const initCar = searchParams.get('car') || '';
+    const initStartdatetime = searchParams.get('startdatetime') || '';
+
+    return <>{Main({ id, initStudent, initDriver, initCar, initStartdatetime })}</>
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={Loading()}>
+            <Search />
+        </Suspense>
+    )
+}
+function Main({ id, initStudent, initDriver, initCar, initStartdatetime }: any) {
 
     const initDate = initStartdatetime?.split('T')[0] || '';
     const initTime = initStartdatetime?.split('T')[1] || '';
@@ -89,27 +108,5 @@ function ScheduleForm({ id, initStudent, initDriver, initCar, initStartdatetime 
                 </form>
             </div>
         </div>
-    );
-}
-
-export default function Page() {
-    const searchParams = useSearchParams();
-
-    const id = searchParams.get('id') || '';
-    const initStudent = searchParams.get('student') || '';
-    const initDriver = searchParams.get('driver') || '';
-    const initCar = searchParams.get('car') || '';
-    const initStartdatetime = searchParams.get('startdatetime') || '';
-
-    return (
-        <Suspense fallback={<Loading />}>
-            <ScheduleForm
-                id={id}
-                initStudent={initStudent}
-                initDriver={initDriver}
-                initCar={initCar}
-                initStartdatetime={initStartdatetime}
-            />
-        </Suspense>
     );
 }
