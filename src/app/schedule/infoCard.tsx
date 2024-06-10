@@ -1,9 +1,15 @@
 'use client';
 import Link from 'next/link';
+import { remove } from '../api/api';
 
 const InfoCard = ({ id, student, driver, car, startdatetime }: any) => {
     const date = startdatetime.split('T')[0];
     const time = startdatetime.split('T')[1];
+    function handle(): void {
+        remove(id)
+        window.location.href = "/schedule"
+    }
+
     return (
         <div>
             <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden md:max-w-2xl m-4">
@@ -24,12 +30,9 @@ const InfoCard = ({ id, student, driver, car, startdatetime }: any) => {
                     }}>
                     <p>Изменить</p>
                 </Link>
-                {/* <button onClick={handle} className="px-2 py-1 text-white bg-green-500 rounded hover:bg-green-600 text-sm">
-                    Изменить
-                </button>
-                <button className="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-600 text-sm">
+                <button onClick={handle} className="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-600 text-sm">
                     Удалить
-                </button> */}
+                </button>
             </div>
         </div>
 

@@ -1,25 +1,22 @@
+import React, { useEffect, useState } from 'react';
 import AddButton from "../components/AddButton";
-import { getSchedules, getStudents, } from "../api/api"
+import { getSchedules } from "../api/api";
 import InfoCard from "./infoCard";
-import { useState } from "react";
-import Link from "next/link";
 import PleaseLoginPage from "../pleaseLogin/page";
+import Loading from '../components/Loading';
+import { QueryResultRow } from '@vercel/postgres';
 
 export default async function Page() {
-    // async function getData() {
-    //     return localStorage.getItem("user");
-    // }
-
-    // const [fullName, setFullName] = useState("");
-    // const [phone, setPhone] = useState("");
-    // const [email, setEmail] = useState("");
-    // const [role, setRole] = useState("");
-
-    const Data = (await getSchedules()).rows;
-    // const user = { fullName, phone, email, role };
-
-
-    if ('driver' === 'driver') {
+    const [loading, setLoading] = useState(true);
+    const Data = (await getSchedules()).rows
+    const storedUser = localStorage.getItem("user");
+    if (loading) {
+        return <Loading />;
+    }
+    else if (storedUser == null) {
+        return <PleaseLoginPage />;
+    }
+    else {
         return (
             <div className="flex items-center justify-center">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-4">
@@ -32,8 +29,5 @@ export default async function Page() {
                 <AddButton />
             </div>
         );
-    }
-    else {
-        return <PleaseLoginPage />;
     }
 }

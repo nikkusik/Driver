@@ -1,24 +1,20 @@
 'use client';
-import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { login } from "../api/api";
 import { Tooltip } from "react-tooltip";
-import { addUser } from "@/app/api/api";
-import { useRouter } from 'next/navigation';
 
 interface Errors {
     fullName?: string;
     phone?: string;
     email?: string;
     password?: string;
-    role?: string;
 }
 
-export default function Page() {
-    const [fullName, setFullName] = useState("");
-    const [phone, setPhone] = useState("");
+export default function ClientPage({ children }: { children: React.ReactNode }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("");
     const [errors, setErrors] = useState<Errors>({});
     const router = useRouter();
 
@@ -27,27 +23,9 @@ export default function Page() {
         return regex.test(email);
     };
 
-    const validatePhone = (phone: string) => {
-        const regex = /^(\+7|8|7)?9\d{9}$/;
-        return regex.test(phone);
-    };
-
-    const validateFullName = (fullName: string) => {
-        const regex = /^[А-Яа-яЁё\s]+$/;
-        return regex.test(fullName);
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors: Errors = {};
-
-        if (!validateFullName(fullName)) {
-            newErrors.fullName = "ФИО должно содержать только русские буквы";
-        }
-
-        if (!validatePhone(phone)) {
-            newErrors.phone = "Неверный формат номера телефона";
-        }
 
         if (!validateEmail(email)) {
             newErrors.email = "Неверный формат почты";
@@ -61,42 +39,16 @@ export default function Page() {
             setErrors(newErrors);
         } else {
             setErrors({});
-            await addUser(fullName, phone, email, password, "student");
-            const user = { fullName, email };
+            const user = await login(email, password);
             localStorage.setItem("user", JSON.stringify(user));
-            router.push("/profile"); // Redirect to profile page
+            window.location.href = "/profile"
         }
     };
-
     return (
         <div className="flex place-content-center h-screen -mt-20">
             <div className="w-full max-w-md p-8 space-y-6 rounded shadow-md m-auto">
-                <h2 className="text-2xl font-bold text-center">Регистрация</h2>
+                <h2 className="text-2xl font-bold text-center">Вход</h2>
                 <form className="space-y-4" onSubmit={handleSubmit}>
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="ФИО"
-                            className={`w-full px-3 py-2 border rounded text-black ${errors.fullName ? 'border-red-500' : ''}`}
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            data-tooltip-id="fullNameTooltip"
-                            data-tooltip-content={errors.fullName || ''}
-                        />
-                        <Tooltip id="fullNameTooltip" place="right" />
-                    </div>
-                    <div className="relative">
-                        <input
-                            type="tel"
-                            placeholder="Номер телефона"
-                            className={`w-full px-3 py-2 border rounded text-black ${errors.phone ? 'border-red-500' : ''}`}
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            data-tooltip-id="phoneTooltip"
-                            data-tooltip-content={errors.phone || ''}
-                        />
-                        <Tooltip id="phoneTooltip" place="right" />
-                    </div>
                     <div className="relative">
                         <input
                             type="email"
@@ -122,10 +74,10 @@ export default function Page() {
                         <Tooltip id="passwordTooltip" place="right" />
                     </div>
                     <button type="submit" className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
-                        Зарегистрироваться
+                        Войти
                     </button>
-                    <Link href="/enter" className="w-full px-4 py-2 text-white">
-                        <p className="text-center">Уже зарегистрированы?</p>
+                    <Link href="/enter/registration" className="w-full px-4 py-2 text-white">
+                        <p className="text-center">Зарегестрироваться</p>
                     </Link>
                 </form>
             </div>
