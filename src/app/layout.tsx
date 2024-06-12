@@ -3,7 +3,7 @@ import "./globals.css";
 import { Metadata } from "next";
 import LayoutClient from "./clientLayout";
 import { getCookie } from "./api/api";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const inter = Inter({ subsets: ["latin"] });
 
