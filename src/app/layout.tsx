@@ -1,13 +1,25 @@
-import type { Metadata } from "next";
-import ClientRootLayout from "./clientLayout";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Metadata } from "next";
+import LayoutClient from "./clientLayout";
+import { getCookie } from "./api/api";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Driver",
   description: "Driver. Планируйте. Обучайте.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const user = await getCookie();
   return (
-    <ClientRootLayout>{children}</ClientRootLayout>
+    <html lang="ru">
+      <body>
+        <LayoutClient user={user}>{children}</LayoutClient>
+        <SpeedInsights />
+      </body>
+    </html>
   );
 }

@@ -1,35 +1,54 @@
+'use client';
 import AddButton from "../components/AddButton";
-import { getSchedules, getStudents, } from "../api/api"
-import InfoCard from "./infoCard";
-import { useState } from "react";
-import Link from "next/link";
+import { getCookie, getSchedules, getSchedulesBusy, getSchedulesNotBusy, getStudent } from "../api/api";
 import PleaseLoginPage from "../pleaseLogin/page";
+import InfoCard from "./infoCard";
+import { useState, useEffect } from 'react';
+import { QueryResultRow } from "@vercel/postgres";
 
-export default async function Page() {
-    // async function getData() {
-    //     return localStorage.getItem("user");
-    // }
+export default function Page({ params }: any) {
+    const [isBusyView, setIsBusyView] = useState(true); // State to toggle between busy and non-busy schedules
+    const [data, setData] = useState<QueryResultRow[]>();
+    const [user, setUser] = useState<any>(null);
 
-    // const [fullName, setFullName] = useState("");
-    // const [phone, setPhone] = useState("");
-    // const [email, setEmail] = useState("");
-    // const [role, setRole] = useState("");
+    useEffect(() => {
+        async function fetchData() {
+            const user = await getCookie();
+            setUser(user);
 
-    const Data = (await getSchedules()).rows;
-    // const user = { fullName, phone, email, role };
+            if (user?.role === 'driver' || user?.role === 'student') {
+                const Data = isBusyView ? await getSchedulesBusy() : await getSchedulesNotBusy();
+                setData(Data?.rows || []);
+            }
+        }
 
+        fetchData();
+    }, [isBusyView]);
 
-    if ('driver' === 'driver') {
+    if (user?.role === 'driver') {
         return (
-            <div className="flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center">
+                <div className="flex justify-center mb-4">
+                    <button onClick={() => setIsBusyView(!isBusyView)} className="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                        {isBusyView ? "Показать не занятые" : "Показать занятые"}
+                    </button>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-4">
-                    {Data.map((item, index) => (
-                        <div key={index} className="relative p-4 border rounded shadow-md">
-                            <InfoCard id={item.id} student={item.student} driver={item.driver} car={item.car} startdatetime={item.startdatetime} />
-                        </div>
+                    {data?.map((item) => (
+                        <InfoCard key={item.id} id={item.id} student={item.student} driver={item.driver} car={item.car} startdatetime={item.startdatetime} />
                     ))}
                 </div>
-                <AddButton />
+            </div>
+        );
+    }
+    else if (user?.role === 'student') {
+        return (
+            <div className="flex flex-col items-center justify-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-4">
+                    {data?.map((item) => (
+                        <InfoCard key={item.id} id={item.id} student={item.student} driver={item.driver} car={item.car} startdatetime={item.startdatetime} />
+                    ))}
+                </div>
             </div>
         );
     }

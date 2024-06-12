@@ -24,33 +24,36 @@ export default function Page() {
         </Suspense>
     )
 }
-function Main({ id, initStudent, initDriver, initCar, initStartdatetime }: any) {
+function Main({ id, initStudent, initDriver, initCar, initStartdatetime, initBusy }: any) {
     const initDate = initStartdatetime?.split('T')[0] || '';
     const initTime = initStartdatetime?.split('T')[1] || '';
 
     const [student, setStudent] = useState(initStudent);
     const [driver, setDriver] = useState(initDriver);
     const [car, setCar] = useState(initCar);
+    const [busy, setBusy] = useState(initBusy);
     const [startdatetime, setStartdatetime] = useState(initDate + "T" + initTime);
 
     useEffect(() => {
         setStudent(initStudent);
         setDriver(initDriver);
         setCar(initCar);
+        setBusy(initBusy);
         setStartdatetime(initDate + "T" + initTime);
-    }, [initStudent, initDriver, initCar, initDate, initTime]);
+    }, [initStudent, initDriver, initCar, initDate, initTime, initBusy]);
 
     function onChangeHandler(event: ChangeEvent<HTMLInputElement>): void {
         const { name, value } = event.target;
         if (name === 'student') setStudent(value);
         if (name === 'driver') setDriver(value);
         if (name === 'car') setCar(value);
+        if (name === 'busy') setBusy(value);
         if (name === 'startdatetime') setStartdatetime(value);
     }
 
     async function onSubmitHandler(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
-        await edit(student, driver, car, startdatetime, id);
+        await edit(student, driver, car, startdatetime, id, busy);
         window.location.href = "/schedule"
     }
 

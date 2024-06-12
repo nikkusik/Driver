@@ -1,9 +1,9 @@
-import { Children } from "react";
+import { cookies } from "next/headers";
+import { login } from "../api/api";
 import ClientPage from "./clientPage";
 
-
-export default function Page({ children }: { children: React.ReactNode }) {
+export default async function Page() {
     return (
-        <ClientPage>{children}</ClientPage>
+        <ClientPage></ClientPage>
     );
 }

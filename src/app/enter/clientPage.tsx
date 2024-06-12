@@ -1,9 +1,10 @@
 'use client';
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { login } from "../api/api";
+import { iUser, login } from "../api/api";
 import { Tooltip } from "react-tooltip";
+import { cookies } from "next/dist/client/components/headers";
+// import { cookies } from "next-client-cookies";
 
 interface Errors {
     fullName?: string;
@@ -12,11 +13,10 @@ interface Errors {
     password?: string;
 }
 
-export default function ClientPage({ children }: { children: React.ReactNode }) {
+export default function ClientPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState<Errors>({});
-    const router = useRouter();
 
     const validateEmail = (email: string) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,11 +39,18 @@ export default function ClientPage({ children }: { children: React.ReactNode }) 
             setErrors(newErrors);
         } else {
             setErrors({});
-            const user = await login(email, password);
-            localStorage.setItem("user", JSON.stringify(user));
-            window.location.href = "/profile"
+            const data = await login(email, password);
+            if (data.error == "Пользователь не найден") {
+                setErrors({ email: 'Неверные данные' });
+                console.log(data.user)
+                console.log(data.error)
+            }
+            else {
+                window.location.href = "/profile";
+            }
         }
     };
+
     return (
         <div className="flex place-content-center h-screen -mt-20">
             <div className="w-full max-w-md p-8 space-y-6 rounded shadow-md m-auto">
@@ -76,11 +83,12 @@ export default function ClientPage({ children }: { children: React.ReactNode }) 
                     <button type="submit" className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
                         Войти
                     </button>
-                    <Link href="/enter/registration" className="w-full px-4 py-2 text-white">
-                        <p className="text-center">Зарегестрироваться</p>
+                    <Link href="/enter/registration" className="w-full px-4 text-white">
+                        <p className="text-center">Зарегистрироваться</p>
                     </Link>
                 </form>
             </div>
         </div>
     );
 }
+

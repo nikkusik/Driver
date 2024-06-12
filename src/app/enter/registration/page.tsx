@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Tooltip } from "react-tooltip";
 import { addUser } from "@/app/api/api";
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { cookies } from "next/headers";
 
 interface Errors {
     fullName?: string;
@@ -20,7 +22,6 @@ export default function Page() {
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [errors, setErrors] = useState<Errors>({});
-    const router = useRouter();
 
     const validateEmail = (email: string) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -59,12 +60,11 @@ export default function Page() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-        } else {
+        } 
+        else {
             setErrors({});
-            await addUser(fullName, phone, email, password, "student");
-            const user = { fullName, email };
-            localStorage.setItem("user", JSON.stringify(user));
-            router.push("/profile"); // Redirect to profile page
+            const data = await addUser(fullName, phone, email, password, "student");
+            window.location.href = "/enter";
         }
     };
 
