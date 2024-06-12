@@ -3,7 +3,8 @@ import "./globals.css";
 import { Metadata } from "next";
 import LayoutClient from "./clientLayout";
 import { getCookie } from "./api/api";
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import { SpeedInsights as Next } from "@vercel/speed-insights/next"
+import { SpeedInsights as React } from "@vercel/speed-insights/react"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="ru">
       <body>
         <LayoutClient user={user}>{children}</LayoutClient>
-        <SpeedInsights />
+        <Next />
+        <React />
       </body>
     </html>
   );
