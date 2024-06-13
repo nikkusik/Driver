@@ -4,6 +4,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { addSchedule, getCookie, getStudents } from '../api/api';
 import { cookies } from 'next/headers';
 import { QueryResultRow } from '@vercel/postgres';
+import { Tooltip } from 'react-tooltip';
 interface Errors {
     date?: string
 }
@@ -18,7 +19,7 @@ export default function Page() {
     const [busy, setBusy] = useState(false);
     const [startdatetimes, setStartdatetimes] = useState<string[]>([]);
     const [currentDateTime, setCurrentDateTime] = useState(initDate + "T" + initTime)
-    
+
     const [errors, setErrors] = useState<Errors>({});
 
     useEffect(() => {
@@ -43,10 +44,11 @@ export default function Page() {
 
     const newErrors: Errors = {};
     function addDateTime() {
-        if(new Date(currentDateTime) < new Date(initDate + "T" + initTime)){
+        if (new Date(currentDateTime) > new Date(initDate + "T" + initTime)) {
             setStartdatetimes([...startdatetimes, currentDateTime]);
+            setErrors({})
         }
-        else{
+        else {
             newErrors.date = "Неверная дата";
             setErrors(newErrors)
         }
@@ -88,7 +90,10 @@ export default function Page() {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black"
                                     value={currentDateTime}
                                     onChange={onChangeHandler}
+                                    data-tooltip-id="dateTooltip"
+                                    data-tooltip-content={errors.date || ''}
                                 />
+                                <Tooltip id="dateTooltip" place="left" />
                                 <button
                                     type="button"
                                     className="ml-4 px-3 py-2 bg-green-500 text-white rounded-lg"
