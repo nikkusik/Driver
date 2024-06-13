@@ -23,7 +23,8 @@ export default function OneElement({ id, startdatetime, driver, car }: any) {
     return (
         <li key={id} className="text-gray-900 flex justify-between items-center w-1/4">
             <div className='m-2 p-2 bg-white w-full rounded'>
-                <p className="font-medium">{startdatetime.split('T')[0]} {startdatetime.split("T")[1]}</p>
+                <p className="font-medium">Дата: {startdatetime.split('T')[0]}</p>
+                <p className="font-medium">Время: {startdatetime.split("T")[1]}</p>
                 <p className="text-sm text-gray-600">Водитель: {driverName}</p>
                 <p className="text-sm text-gray-600">Машина: {car}</p>
             </div>
