@@ -40,6 +40,27 @@ export default function Page({ params }: any) {
         return <PleaseLoginPage />;
     }
 
+    if (data?.length === 0) {
+        return (
+            <div className="flex flex-col items-center h-screen -mt-20">
+                {user.role === 'driver' && (
+                    <div className="flex justify-center mb-4 mt-20">
+                        <button onClick={() => setIsBusyView(!isBusyView)} className="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                            {isBusyView ? "Показать не занятые" : "Показать занятые"}
+                        </button>
+                    </div>
+                )}
+                <div className="h-full flex items-center justify-center">
+                    <div className="text-center -mt-20">
+                        <h3 className="text-lg font-bold mb-4">Нет доступных занятий</h3>
+                        <p className="mb-4">На данный момент нет доступных занятий.</p>
+                    </div>
+                </div>
+            </div>
+
+        );
+    }
+
     return (
         <div className="flex flex-col items-center justify-center">
             {user.role === 'driver' && (
