@@ -19,8 +19,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="ru">
       <body>
         <LayoutClient user={user}>{children}</LayoutClient>
-        <Next />
-        <React />
+        {/* <Next />
+        <React /> */}
       </body>
     </html>
   );

@@ -42,10 +42,8 @@ export async function getSchedulesNotBusy() {
     await client.connect();
     try {
         const curUser = await getCookie();
-        if (curUser.role === "driver") {
-            let { rows } = await client.sql`SELECT * FROM schedules where driver = ${curUser.id} and busy = false`;
-            return { rows }
-        }
+        let { rows } = await client.sql`SELECT * FROM schedules where driver = ${curUser.id} and busy = false`;
+        return { rows }
     } finally {
         await client.end();
     }
@@ -67,7 +65,7 @@ export async function getDrivers() {
     await client.connect();
     try {
         let { rows, fields } =
-            await client.sql`SELECT fullname FROM users where role="driver";`;
+            await client.sql`SELECT fullname FROM users where role='driver';`;
         return { rows, fields }
     } finally {
         await client.end();

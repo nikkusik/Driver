@@ -5,6 +5,9 @@ import { QueryResultRow } from '@vercel/postgres';
 import { useEffect, useState } from 'react';
 
 const InfoCard = ({ id, student, driver, car, startdatetime }: any) => {
+    if (student === "") {
+        student
+    }
     const date = startdatetime.split('T')[0];
     const time = startdatetime.split('T')[1];
     const [studentName, setStudent] = useState("");
@@ -19,10 +22,16 @@ const InfoCard = ({ id, student, driver, car, startdatetime }: any) => {
 
     useEffect(() => {
         async function fetchData() {
-            const dataStudent = await getStudent(student);
+            let dataStudent: any
+            if (student === "") {
+                setStudent("Свободно")
+            }
+            else {
+                dataStudent = await getStudent(student);
+                setStudent(dataStudent.rows[0].fullname);
+            }
             const dataDriver = await getDriver(driver);
             const dataRole = await getCookie();
-            setStudent(dataStudent.rows[0].fullname);
             setDriver(dataDriver.rows[0].fullname);
             setRole(dataRole.role);
         }

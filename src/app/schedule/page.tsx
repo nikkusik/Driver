@@ -16,9 +16,9 @@ export default function Page({ params }: any) {
             const user = await getCookie();
             setUser(user);
 
-            if (user?.role === 'driver' || user?.role === 'student') {
+            if (user?.role === 'driver') {
                 const Data = isBusyView ? await getSchedulesBusy() : await getSchedulesNotBusy();
-                setData(Data?.rows || []);
+                setData(Data?.rows);
             }
         }
 
