@@ -24,6 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode, us
 
     fetchUser();
   }, []);
+  
+  const displayRole = user?.role === 'student' ? 'Студент' : user?.role === 'driver' ? 'Водитель' : user?.role;
   return (
     <html lang="ru">
       <body className={inter.className}>
@@ -50,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode, us
           <div className="absolute right-0 px-4">
             {user !== null ? (
               <div className="flex items-center space-x-4">
+                <div>{displayRole}</div>
                 <Link href="/profile" className="text-white underline">
                   Профиль
                 </Link>
