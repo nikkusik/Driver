@@ -37,6 +37,18 @@ export async function getSchedulesBusy() {
     }
 }
 
+export async function getLastDate() {
+    const client = createClient();
+    await client.connect();
+    try {
+        const curUser = await getCookie();
+        let { rows } = await client.sql`SELECT * FROM schedules where driver = ${curUser.id}`;
+        return { rows }
+    } finally {
+        await client.end();
+    }
+}
+
 export async function getSchedulesNotBusy() {
     const client = createClient();
     await client.connect();

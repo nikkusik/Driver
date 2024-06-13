@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { addSchedule, getCookie, getStudents } from '../api/api';
+import { addSchedule, getCookie, getLastDate, getSchedulesBusy, getStudents } from '../api/api';
 import { cookies } from 'next/headers';
 import { QueryResultRow } from '@vercel/postgres';
 import { Tooltip } from 'react-tooltip';
@@ -13,7 +13,7 @@ export default function Page() {
     const initTime = new Date().toTimeString().slice(0, 5);
 
     const [student, setStudent] = useState("");
-    const [students, setStudents] = useState<QueryResultRow[]>([]);
+    const [lastDate, setLastDates] = useState<QueryResultRow>([]);
     const [driver, setDriver] = useState("");
     const [car, setCar] = useState("");
     const [busy, setBusy] = useState(false);
@@ -26,9 +26,10 @@ export default function Page() {
         async function fetchData() {
             const cookieData = await getCookie();
             setDriver(cookieData.id);
-
-            const studentData = await getStudents();
-            setStudents(studentData.rows);
+            const dateData = await getLastDate();
+            setLastDates(dateData.rows)
+            // const studentData = await getStudents();
+            // setStudents(studentData.rows);
         }
 
         fetchData();
@@ -44,7 +45,18 @@ export default function Page() {
 
     const newErrors: Errors = {};
     function addDateTime() {
-        if (new Date(currentDateTime) > new Date(initDate + "T" + initTime)) {
+        let check: boolean = false
+        for (let i = 0; i < lastDate.length; i++) {
+            const compare = new Date(currentDateTime).getHours() - new Date(lastDate[i].startdatetime).getHours();
+            const days = new Date(currentDateTime).getDay() - new Date(lastDate[i].startdatetime).getDay();
+            const months = new Date(currentDateTime).getMonth() - new Date(lastDate[i].startdatetime).getMonth();
+            const years = new Date(currentDateTime).getFullYear() - new Date(lastDate[i].startdatetime).getFullYear();
+            if (compare < 2 && days === 0 && months === 0 && years === 0) {
+                check = true;
+            }
+        }
+
+        if (new Date(currentDateTime) > new Date(initDate + "T" + initTime) && check === false) {
             setStartdatetimes([...startdatetimes, currentDateTime]);
             setErrors({})
         }
@@ -52,7 +64,6 @@ export default function Page() {
             newErrors.date = "Неверная дата";
             setErrors(newErrors)
         }
-
         setCurrentDateTime(initDate + "T" + initTime);
     }
 
@@ -64,6 +75,10 @@ export default function Page() {
         }
         window.location.href = "/schedule";
     }
+
+    // function removeDateTime(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    //     throw new Error('Function not implemented.');
+    // }
 
     return (
         <div className="flex place-content-center h-screen -mt-20">
@@ -104,7 +119,9 @@ export default function Page() {
                             </div>
                             <ul className="mt-2 text-gray-400">
                                 {startdatetimes.map((datetime, index) => (
-                                    <li key={index}>{datetime.replace('T', ' ')}</li>
+                                    <li key={index}>{datetime.replace('T', ' ')}
+                                        {/* <button onClick={removeDateTime} className='ml-5 text-red-600'>Убрать</button> */}
+                                    </li>
                                 ))}
                             </ul>
                         </div>
