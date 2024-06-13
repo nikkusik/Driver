@@ -9,10 +9,10 @@ export async function getSchedules() {
     try {
         const curUser = await getCookie();
         if (curUser.role === "driver") {
-            let { rows } = await client.sql`SELECT * FROM schedules`;
+            let { rows } = await client.sql`SELECT * FROM schedules WHERE archived = FALSE`;
             return { rows }
         } else if (curUser.role === "student") {
-            let { rows } = await client.sql`SELECT * FROM schedules WHERE busy=false;`;
+            let { rows } = await client.sql`SELECT * FROM schedules WHERE busy=false AND archived = FALSE;`;
             return { rows }
         }
     } finally {
@@ -26,12 +26,100 @@ export async function getSchedulesBusy() {
     try {
         const curUser = await getCookie();
         if (curUser.role === "driver") {
-            let { rows } = await client.sql`SELECT * FROM schedules where driver = ${curUser.id} and busy = true`;
+            let { rows } = await client.sql`SELECT * FROM schedules where driver = ${curUser.id} and busy = true  AND archived = FALSE`;
             return { rows }
         } else if (curUser.role === "student") {
-            let { rows } = await client.sql`SELECT * FROM schedules where student = ${curUser.id} and busy = true`;
+            let { rows } = await client.sql`SELECT * FROM schedules where student = ${curUser.id} and busy = true  AND archived = FALSE`;
             return { rows }
         }
+    } finally {
+        await client.end();
+    }
+}
+
+export async function getArchivedSchedules() {
+    const client = createClient();
+    await client.connect();
+    try {
+        const curUser = await getCookie();
+        if (curUser.role === "driver") {
+            let { rows } = await client.sql`SELECT * FROM schedules WHERE driver = ${curUser.id} AND archived = TRUE`;
+            return { rows }
+        } else if (curUser.role === "student") {
+            let { rows } = await client.sql`SELECT * FROM schedules WHERE student = ${curUser.id} AND archived = TRUE`;
+            return { rows }
+        }
+    } finally {
+        await client.end();
+    }
+}
+
+export async function archiveSchedule(id: any) {
+    const client = createClient();
+    await client.connect();
+    try {
+        const curUser = await getCookie();
+        await client.sql`UPDATE schedules SET archived = TRUE WHERE id = ${id}`;
+        const { rows } = await client.sql`SELECT student FROM schedules WHERE id = ${id}`;
+        const studentId = rows[0]?.student;
+        if (studentId) {
+            await notifyStudent(studentId, id);
+        }
+    } finally {
+        await client.end();
+    }
+}
+
+export async function notifyStudent(studentId: any, scheduleId: any) {
+    const client = createClient();
+    await client.connect();
+    try {
+        const message = `Ваше запись: ${scheduleId}, была архивирована.`;
+        await client.sql`INSERT INTO notifications (user_id, message) VALUES (${studentId}, ${message})`;
+    } finally {
+        await client.end();
+    }
+}
+
+export async function getNotifications(userId: any) {
+    const client = createClient();
+    await client.connect();
+    try {
+        let { rows } = await client.sql`SELECT * FROM notifications WHERE user_id = ${userId} AND read = FALSE`;
+        return { rows };
+    } finally {
+        await client.end();
+    }
+}
+
+export async function getNames(studentIds: any, driverIds: any) {
+    const client = createClient();
+    await client.connect();
+    try {
+        const students = await client.sql`SELECT id, fullname FROM users WHERE id = ANY(${studentIds}) AND role='student'`;
+        const drivers = await client.sql`SELECT id, fullname FROM users WHERE id = ANY(${driverIds}) AND role='driver'`;
+
+        return {
+            students: students.rows.reduce((acc: any, row: any) => {
+                acc[row.id] = row.fullname;
+                return acc;
+            }, {}),
+            drivers: drivers.rows.reduce((acc: any, row: any) => {
+                acc[row.id] = row.fullname;
+                return acc;
+            }, {})
+        };
+    } finally {
+        await client.end();
+    }
+}
+
+
+export async function markNotificationsRead(userId: any) {
+    const client = createClient();
+    await client.connect();
+    try {
+        await client.sql`UPDATE notifications SET read = TRUE WHERE user_id = ${userId}`;
     } finally {
         await client.end();
     }

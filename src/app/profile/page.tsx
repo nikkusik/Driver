@@ -1,16 +1,21 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Loading from '../components/Loading';
-import { delCookie, getCookie, iUser } from '../api/api';
+import { delCookie, getCookie, iUser, getArchivedSchedules } from '../api/api';
+import InfoCard from '../schedule/infoCard';
+import { QueryResultRow } from '@vercel/postgres';
 
 export default function Page() {
     const [data, setData] = useState<iUser | null>(null);
+    const [archivedData, setArchivedData] = useState<QueryResultRow[]>();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
             const cookieData = await getCookie();
             setData(cookieData);
+            const archivedSchedules = await getArchivedSchedules();
+            setArchivedData(archivedSchedules?.rows);
             setLoading(false);
         }
 
@@ -28,8 +33,8 @@ export default function Page() {
     const displayRole = data.role === 'student' ? 'Студент' : data.role === 'driver' ? 'Водитель' : data.role;
 
     const handleLogout = () => {
-        delCookie()
-        window.location.reload()
+        delCookie();
+        window.location.reload();
         window.location.href = "/enter";
     };
 
@@ -52,6 +57,11 @@ export default function Page() {
                         onClick={handleLogout}
                         className="mt-6 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
                         Выйти
+                    </button>
+                    <button
+                        onClick={() => window.location.href = "/archive"}
+                        className="mt-6 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                        Перейти в архив
                     </button>
                 </div>
             </div>
