@@ -20,6 +20,10 @@ export default function Page({ params }: any) {
                 const Data = isBusyView ? await getSchedulesBusy() : await getSchedulesNotBusy();
                 setData(Data?.rows);
             }
+            else if (user?.role === "student") {
+                const Data = await getSchedulesBusy()
+                setData(Data?.rows);
+            }
         }
 
         fetchData();
