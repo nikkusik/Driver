@@ -4,7 +4,9 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { addSchedule, getCookie, getStudents } from '../api/api';
 import { cookies } from 'next/headers';
 import { QueryResultRow } from '@vercel/postgres';
-
+interface Errors {
+    date?: string
+}
 export default function Page() {
     const initDate = new Date().toISOString().slice(0, 10);
     const initTime = new Date().toTimeString().slice(0, 5);
@@ -15,7 +17,9 @@ export default function Page() {
     const [car, setCar] = useState("");
     const [busy, setBusy] = useState(false);
     const [startdatetimes, setStartdatetimes] = useState<string[]>([]);
-    const [currentDateTime, setCurrentDateTime] = useState(initDate + "T" + initTime);
+    const [currentDateTime, setCurrentDateTime] = useState(initDate + "T" + initTime)
+    
+    const [errors, setErrors] = useState<Errors>({});
 
     useEffect(() => {
         async function fetchData() {
@@ -37,8 +41,16 @@ export default function Page() {
         if (name === 'currentDateTime') setCurrentDateTime(value);
     }
 
+    const newErrors: Errors = {};
     function addDateTime() {
-        setStartdatetimes([...startdatetimes, currentDateTime]);
+        if(new Date(currentDateTime) < new Date(initDate + "T" + initTime)){
+            setStartdatetimes([...startdatetimes, currentDateTime]);
+        }
+        else{
+            newErrors.date = "Неверная дата";
+            setErrors(newErrors)
+        }
+
         setCurrentDateTime(initDate + "T" + initTime);
     }
 

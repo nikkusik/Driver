@@ -24,8 +24,8 @@ export default function OneElement({ id, startdatetime, driver, car }: any) {
         <li key={id} className="text-gray-900 flex justify-between items-center w-1/4">
             <div className='m-2 p-2 bg-white w-full rounded'>
                 <p className="font-medium">{startdatetime.split('T')[0]} {startdatetime.split("T")[1]}</p>
-                <p className="text-sm text-gray-600">{driverName}</p>
-                <p className="text-sm text-gray-600">{car}</p>
+                <p className="text-sm text-gray-600">Водитель: {driverName}</p>
+                <p className="text-sm text-gray-600">Машина: {car}</p>
             </div>
             <button onClick={() => handleSignup(id)} className="p-2 bg-green-500 text-white rounded">
                 Запись
