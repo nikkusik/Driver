@@ -15,14 +15,15 @@ export default function Page({ params }: any) {
         async function fetchData() {
             const user = await getCookie();
             setUser(user);
-            let Data: any
-            if (user?.role === 'driver' || user?.role === 'student') {
-                Data = await getArchivedSchedules();
-                setData(Data?.rows);
-            }
+
+            let Data = await getArchivedSchedules();
+
             const studentIds = Data?.rows.map((item: any) => item.student).filter((id: any) => id);
-            const driverIds = Data?.rows.map((item: any) => item.driver);
+            const driverIds = Data?.rows.map((item: any) => item.driver)
+
             const namesData = await getNames(studentIds, driverIds);
+
+            setData(Data?.rows);
             setNames(namesData);
         }
 
@@ -38,7 +39,13 @@ export default function Page({ params }: any) {
             <h2 className="text-2xl font-bold mb-6 text-gray-300">Архив</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-4">
                 {data?.map((item) => (
-                    <InfoCard key={item.id} id={item.id} student={names.students[item.student]} driver={names.drivers[item.driver]} car={item.car} startdatetime={item.startdatetime} />
+                    <InfoCard 
+                    key={item.id} 
+                    id={item.id} 
+                    student={names.students[item.student] || "Свободно"} 
+                    driver={names.drivers[item.driver]} 
+                    car={item.car} 
+                    startdatetime={item.startdatetime} />
                 ))}
             </div>
         </div>
