@@ -17,6 +17,7 @@ export default function Page() {
     const [driver, setDriver] = useState("");
     const [car, setCar] = useState("");
     const [busy, setBusy] = useState(false);
+    const [archived, setArchived] = useState(false);
     const [startdatetimes, setStartdatetimes] = useState<string[]>([]);
     const [currentDateTime, setCurrentDateTime] = useState(initDate + "T" + initTime)
 
@@ -71,7 +72,7 @@ export default function Page() {
         event.preventDefault();
         setBusy(false);
         for (const startdatetime of startdatetimes) {
-            await addSchedule(student, driver, car, startdatetime, busy);
+            await addSchedule(student, driver, car, startdatetime, busy, archived);
         }
         window.location.href = "/schedule";
     }

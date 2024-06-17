@@ -218,11 +218,11 @@ export async function updateBusy(id: any, busy: boolean) {
     }
 };
 
-export async function addSchedule(student: any, driver: any, car: any, startdatetime: any, busy: boolean) {
+export async function addSchedule(student: any, driver: any, car: any, startdatetime: any, busy: boolean, archived: boolean) {
     const client = createClient();
     await client.connect();
     try {
-        await client.sql`insert into public.schedules(student, driver, car, startdatetime, busy) values(${student}, ${driver}, ${car}, ${startdatetime}, ${busy})`;
+        await client.sql`insert into public.schedules(student, driver, car, startdatetime, busy, archived) values(${student}, ${driver}, ${car}, ${startdatetime}, ${busy}, ${archived})`;
     } finally {
         await client.end();
     }
